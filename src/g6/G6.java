@@ -8,7 +8,6 @@ public class G6 implements PlayerFactory<BattleshipsPlayer> {
     public G6() {
     }
 
-//    dd
     @Override
     public BattleshipsPlayer getNewInstance() {
         return new Temp();
