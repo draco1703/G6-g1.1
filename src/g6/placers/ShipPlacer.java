@@ -27,6 +27,7 @@ public class ShipPlacer
     private final int xSize;
     private final int ySize;
     private final IntMap heatMap;
+    private IntMap shotMap;
     private final BooleanMap shipMap;
     private final Position[][] positions;
 
@@ -36,6 +37,7 @@ public class ShipPlacer
         this.xSize = xSize;
         this.ySize = ySize;
         heatMap = new IntMap(xSize, ySize);
+        shotMap = new IntMap(xSize, ySize);
         shipMap = new BooleanMap(xSize, ySize);
         positions = new Position[xSize][ySize];
         for (int x = 0; x < xSize; ++x)
@@ -73,6 +75,7 @@ public class ShipPlacer
     public void incoming(Position pos)
     {
         heatMap.add(pos.x, pos.y, shotValue--);
+        shotMap.set(pos.x, pos.y, shotMap.get(pos.x, pos.y)+1);
     }
 
     private ShipConf selectConf(List<ShipConf> confs)
@@ -98,6 +101,10 @@ public class ShipPlacer
             }
         }
         return confs.get(rnd.nextInt(count));
+    }
+
+    public IntMap getShotMap() {
+        return shotMap;
     }
 
     private void placeShip(ShipConf conf, Board board)
