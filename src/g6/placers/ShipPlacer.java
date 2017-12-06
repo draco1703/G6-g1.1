@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package g6.placers;
 
 import battleship.interfaces.Board;
@@ -16,9 +11,7 @@ import java.util.Random;
 import G6.maps.BooleanMap;
 import G6.maps.IntMap;
 
-
-public class ShipPlacer
-{
+public class ShipPlacer {
 
     private boolean adjacentShips = true;
     private boolean useHeatMap = false;
@@ -31,8 +24,7 @@ public class ShipPlacer
     private final BooleanMap shipMap;
     private final Position[][] positions;
 
-    public ShipPlacer(int xSize, int ySize, Random rnd)
-    {
+    public ShipPlacer(int xSize, int ySize, Random rnd) {
         this.rnd = rnd;
         this.xSize = xSize;
         this.ySize = ySize;
@@ -40,61 +32,49 @@ public class ShipPlacer
         shotMap = new IntMap(xSize, ySize);
         shipMap = new BooleanMap(xSize, ySize);
         positions = new Position[xSize][ySize];
-        for (int x = 0; x < xSize; ++x)
-        {
-            for (int y = 0; y < ySize; ++y)
-            {
+        for (int x = 0; x < xSize; ++x) {
+            for (int y = 0; y < ySize; ++y) {
                 positions[x][y] = new Position(x, y);
             }
         }
     }
 
-    public void placeShips(Fleet fleet, Board board)
-    {
+    public void placeShips(Fleet fleet, Board board) {
         shotValue = xSize * ySize;
         shipMap.clear();
 
         //Shuffle the ship list
         List<Ship> ships = new ArrayList<>(fleet.getNumberOfShips());
-        for (Ship s : fleet)
-        {
+        for (Ship s : fleet) {
             ships.add(s);
         }
         Collections.shuffle(ships);
-        for (Ship s : ships)
-        {
+        for (Ship s : ships) {
             List<ShipConf> confs = getConfigurations(s);
             ShipConf conf = selectConf(confs);
-            if (conf != null)
-            {
+            if (conf != null) {
                 placeShip(conf, board);
             }
         }
     }
 
-    public void incoming(Position pos)
-    {
+    public void incoming(Position pos) {
         heatMap.add(pos.x, pos.y, shotValue--);
-        shotMap.set(pos.x, pos.y, shotMap.get(pos.x, pos.y)+1);
+        shotMap.set(pos.x, pos.y, shotMap.get(pos.x, pos.y) + 1);
     }
 
-    private ShipConf selectConf(List<ShipConf> confs)
-    {
+    private ShipConf selectConf(List<ShipConf> confs) {
         int count = confs.size();
-        if (confs.isEmpty())
-        {
+        if (confs.isEmpty()) {
             return null;
         }
-        if(useHeatMap)
-        {
+        if (useHeatMap) {
             Collections.sort(confs);
             int bestValue = confs.get(0).getValue();
             count = 1;
-            for (int i = 1; i < confs.size(); ++i)
-            {
+            for (int i = 1; i < confs.size(); ++i) {
                 ShipConf c = confs.get(i);
-                if (c.getValue() > bestValue)
-                {
+                if (c.getValue() > bestValue) {
                     break;
                 }
                 ++count;
@@ -107,17 +87,14 @@ public class ShipPlacer
         return shotMap;
     }
 
-    private void placeShip(ShipConf conf, Board board)
-    {
+    private void placeShip(ShipConf conf, Board board) {
         int x;
         int y;
         int size = conf.getShip().size();
         board.placeShip(conf.getPosition(), conf.getShip(), conf.getVertical());
-        if (conf.getVertical())
-        {
+        if (conf.getVertical()) {
             x = conf.getPosition().x;
-            if (!adjacentShips)
-            {
+            if (!adjacentShips) {
                 //Bottom
                 y = conf.getPosition().y - 1;
                 markShipPoint(x, y);
@@ -127,23 +104,18 @@ public class ShipPlacer
             }
             //Ship+sides
             y = conf.getPosition().y;
-            for (int i = 0; i < size; ++i)
-            {
-                if (!adjacentShips)
-                {
+            for (int i = 0; i < size; ++i) {
+                if (!adjacentShips) {
                     markShipPoint(x - 1, y + i);
                 }
                 markShipPoint(x, y + i);
-                if (!adjacentShips)
-                {
+                if (!adjacentShips) {
                     markShipPoint(x + 1, y + i);
                 }
             }
-        } else
-        {
+        } else {
             y = conf.getPosition().y;
-            if (!adjacentShips)
-            {
+            if (!adjacentShips) {
                 //Left
                 x = conf.getPosition().x - 1;
                 markShipPoint(x, y);
@@ -154,68 +126,62 @@ public class ShipPlacer
 
             //Ship+sides
             x = conf.getPosition().x;
-            for (int i = 0; i < size; ++i)
-            {
-                if(!adjacentShips) markShipPoint(x + i, y - 1);
+            for (int i = 0; i < size; ++i) {
+                if (!adjacentShips) {
+                    markShipPoint(x + i, y - 1);
+                }
                 markShipPoint(x + i, y);
-                if(!adjacentShips) markShipPoint(x + i, y + 1);
+                if (!adjacentShips) {
+                    markShipPoint(x + i, y + 1);
+                }
             }
         }
     }
 
-    private void markShipPoint(int x, int y)
-    {
-        if (x >= 0 && x < xSize && y >= 0 && y < ySize)
-        {
+    private void markShipPoint(int x, int y) {
+        if (x >= 0 && x < xSize && y >= 0 && y < ySize) {
             shipMap.mark(x, y);
         }
     }
 
-    private List<ShipConf> getConfigurations(Ship ship)
-    {
+    private List<ShipConf> getConfigurations(Ship ship) {
         int size = ship.size();
         List<ShipConf> res = new ArrayList<>();
+        
+        
         //Horizontal
-        for (int y = 0; y < ySize; ++y)
-        {
-            for (int x = 0; x <= xSize - size; ++x)
-            {
+        for (int y = 0; y < ySize; ++y) {
+            for (int x = 0; x <= xSize - size; ++x) {
                 boolean validPos = true;
                 int value = 0;
-                for (int i = 0; i < size; ++i)
-                {
-                    if (shipMap.getPos(x + i, y))
-                    {
+                for (int i = 0; i < size; ++i) {
+                    //shipMap.getPos returns false if
+                    //it is a possible placement for the ship
+                    if (shipMap.getPos(x + i, y)) {
                         validPos = false;
                         break;
                     }
                     value += heatMap.get(x + i, y);
                 }
-                if (validPos)
-                {
+                if (validPos) {
                     res.add(new ShipConf(ship, positions[x][y], false, value));
                 }
             }
         }
 
         //Vertical
-        for (int y = 0; y <= ySize - size; ++y)
-        {
-            for (int x = 0; x < xSize; ++x)
-            {
+        for (int y = 0; y <= ySize - size; ++y) {
+            for (int x = 0; x < xSize; ++x) {
                 boolean validPos = true;
                 int value = 0;
-                for (int i = 0; i < size; ++i)
-                {
-                    if (shipMap.getPos(x, y + i))
-                    {
+                for (int i = 0; i < size; ++i) {
+                    if (shipMap.getPos(x, y + i)) {
                         validPos = false;
                         break;
                     }
                     value += heatMap.get(x, y + i);
                 }
-                if (validPos)
-                {
+                if (validPos) {
                     res.add(new ShipConf(ship, positions[x][y], true, value));
                 }
             }
