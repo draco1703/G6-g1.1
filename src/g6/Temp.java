@@ -11,7 +11,6 @@ import g6.shooters.Shooter;
 public class Temp implements BattleshipsPlayer {
 
     private final Random rnd;
-    
     private Shooter shooter;
     private ShipPlacer placer;
     private int round;
@@ -20,7 +19,6 @@ public class Temp implements BattleshipsPlayer {
         rnd = new Random();
         shooter = null;
         placer = null;
-
     }
 
     @Override
@@ -57,11 +55,11 @@ public class Temp implements BattleshipsPlayer {
 
     @Override
     public void endRound(int round, int points, int enemyPoints) {
-
+//  empy
     }
 
     @Override
     public void endMatch(int won, int lost, int draw) {
-
+//  empty
     }
 }

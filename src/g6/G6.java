@@ -8,7 +8,6 @@ public class G6 implements PlayerFactory<BattleshipsPlayer> {
     public G6() {
     }
 
-//    dd
     @Override
     public BattleshipsPlayer getNewInstance() {
         return new Temp();
@@ -27,7 +26,6 @@ public class G6 implements PlayerFactory<BattleshipsPlayer> {
     @Override
     public String[] getAuthors() {
         String[] res = {"Filip Filipovic, Nicolai Rosenvinge, Jonas Grønbek"};
-                 
         return res;
     }
 }
