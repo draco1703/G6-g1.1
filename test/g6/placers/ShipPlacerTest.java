@@ -47,5 +47,4 @@ public class ShipPlacerTest {
         placer.incoming(position);
         assertEquals(placer.getShotMap().get(2, 8), 1);
     }
-
 }
