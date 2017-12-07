@@ -1,27 +1,18 @@
 package g6.placers;
 
 import battleship.interfaces.Position;
+import battleship.interfaces.Ship;
 
-public class ShipPlacements {
+public class ShipTools {
 
-    private final ShipPlacements ship;
+    private final Ship ship;
     private final Position pos;
-    private int value;
     private boolean vertical;
 
-    public ShipPlacements(ShipPlacements ship, Position pos, boolean vertical, int value) {
+    public ShipTools(Ship ship, Position pos, boolean vertical) {
         this.ship = ship;
         this.pos = pos;
         this.vertical = vertical;
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 
     public boolean isVertical() {
@@ -33,10 +24,10 @@ public class ShipPlacements {
     }
 
     public Position getShipPos() {
-        return ship.pos;
+        return pos;
     }
 
-    public ShipPlacements getShip() {
+    public Ship getShip() {
         return ship;
     }
 }
