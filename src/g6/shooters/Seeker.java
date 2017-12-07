@@ -5,7 +5,7 @@ import battleship.interfaces.Position;
 import battleship.interfaces.Ship;
 import java.util.List;
 import java.util.Random;
-import G6.maps.IntMap;
+import maps.IntMap;
 
 public class Seeker {
 

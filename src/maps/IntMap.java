@@ -1,4 +1,4 @@
-package G6.maps;
+package maps;
 
 import battleship.interfaces.Position;
 import java.util.ArrayList;

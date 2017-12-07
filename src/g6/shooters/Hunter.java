@@ -6,7 +6,7 @@ import battleship.interfaces.Ship;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import G6.maps.IntMap;
+import maps.IntMap;
 
 public class Hunter {
 

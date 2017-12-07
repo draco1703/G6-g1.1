@@ -1,4 +1,4 @@
-package G6.maps;
+package maps;
 
 public class BooleanMap {
 

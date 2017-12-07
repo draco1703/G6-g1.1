@@ -3,7 +3,7 @@ package g6.shooters;
 import battleship.interfaces.Fleet;
 import battleship.interfaces.Position;
 import java.util.Random;
-import G6.maps.IntMap;
+import maps.IntMap;
 
 public class Shooter {
 

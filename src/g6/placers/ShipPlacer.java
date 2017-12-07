@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import G6.maps.BooleanMap;
-import G6.maps.IntMap;
+import maps.IntMap;
+import maps.BooleanMap;
 
 public class ShipPlacer {
 
@@ -20,7 +20,8 @@ public class ShipPlacer {
     private final int xSize;
     private final int ySize;
     private final IntMap heatMap;
-    private IntMap shotMap;
+    private final IntMap shotMap;
+    private final BooleanMap shipPlaces;
     private final BooleanMap shipMap;
     private final Position[][] positions;
 
@@ -31,6 +32,7 @@ public class ShipPlacer {
         heatMap = new IntMap(xSize, ySize);
         shotMap = new IntMap(xSize, ySize);
         shipMap = new BooleanMap(xSize, ySize);
+        shipPlaces = new BooleanMap(xSize, ySize);
         positions = new Position[xSize][ySize];
         for (int x = 0; x < xSize; ++x) {
             for (int y = 0; y < ySize; ++y) {
@@ -55,27 +57,64 @@ public class ShipPlacer {
     }
 
     public void shipPlacer(Fleet fleet, Board board) {
-        
+
         int sizeX = board.sizeX();
         int sizeY = board.sizeY();
-        for(int i = 0; i < fleet.getNumberOfShips(); ++i)
-        {
+        for (int i = 0; i < fleet.getNumberOfShips(); ++i) {
+            boolean placed = false;
             Ship s = fleet.getShip(i);
-            boolean vertical = rnd.nextBoolean();
-            Position pos;
-            if(vertical)
-            {
-                int x = rnd.nextInt(sizeX);
-                int y = rnd.nextInt(sizeY-(s.size()-1));
-                pos = new Position(x, y);
-            }
-            else
-            {
-                int x = rnd.nextInt(sizeX-(s.size()-1));
-                int y = rnd.nextInt(sizeY);
-                pos = new Position(x, y);
-            }
-            board.placeShip(pos, s, vertical);
+            boolean angle = rnd.nextBoolean();
+            Position pos = null;
+            do {
+                if (angle && sizeY >= s.size()) {
+                    int x = rnd.nextInt(sizeX);
+                    int y = rnd.nextInt(sizeY - (s.size() - 1));
+                    if (checkIfOtherShips(s, x, y, angle) == true) {
+                        pos = new Position(x, y);
+                        for (int j = 0; j < s.size(); j++) {
+                            shipPlaces.mark(x, y + j);
+                        }
+                        placed = true;
+                    }
+
+                } else {
+                    angle = false;
+                    int x = rnd.nextInt(sizeX - (s.size() - 1));
+                    int y = rnd.nextInt(sizeY);
+                    if (checkIfOtherShips(s, x, y, angle) == true) {
+                        pos = new Position(x, y);
+                        for (int j = 0; j < s.size(); j++) {
+                            shipPlaces.mark(x + j, y);
+                        }
+                        placed = true;
+                    }
+                }
+            } while (placed = false);
+
+            board.placeShip(pos, s, angle);
+
         }
+    }
+
+    public boolean checkIfOtherShips(Ship s, int x, int y, boolean angle) {
+        if (angle) {
+            for (int j = 0; j < s.size(); j++) {
+                if (shipPlaces.getPos(x, y + j) == true) {
+                    return false;
+                }
+            }
+        } else {
+            for (int j = 0; j < s.size(); j++) {
+                if (shipPlaces.getPos(x + j, y) == true) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean checkIfPossiblePlace(Ship s, int x, int y, boolean angle) {
+        //skal effektiviseres
+        return true;
     }
 }
