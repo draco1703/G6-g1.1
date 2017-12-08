@@ -15,12 +15,12 @@ public class G6 implements PlayerFactory<BattleshipsPlayer> {
 
     @Override
     public String getID() {
-        return "G6ny";
+        return "G6";
     }
 
     @Override
     public String getName() {
-        return "Den nye";
+        return "Far East Movement";
     }
 
     @Override

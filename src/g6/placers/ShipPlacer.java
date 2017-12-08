@@ -73,13 +73,15 @@ public class ShipPlacer {
         int count = 0;
         int sizeX = board.sizeX();
         int sizeY = board.sizeY();
-        Position pos = null;
+        Position pos;
         boolean shipPlaced = false;
 
-        //vertical
+        
         do {
             count++;
             boolean angle = rnd.nextBoolean();
+            
+            //vertical
             if (angle && sizeY >= ship.size()) {
 
                 int x = rnd.nextInt(sizeX);
