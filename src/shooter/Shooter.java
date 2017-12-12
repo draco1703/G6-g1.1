@@ -11,14 +11,14 @@ import maps.BoardFields;
 public class Shooter {
 
     private int enemyFleetSize;
-
     private final int sizeX;
     private final int sizeY;
     private final Random rnd;
     private boolean finish;
-    BoardFields hitShot;
     private Position pos;
+    private BoardFields hitShot;
     private final List<BoardFields> hitMap = new ArrayList<>();
+    private final List<Position>positiveHitsMap = new ArrayList<>();
     private BoardFields temp;
 
     public Shooter(int sizeX, int sizeY, Random rnd) {
@@ -35,7 +35,7 @@ public class Shooter {
         return res;
     }
 
-    //skal returnerer en position der repræsenterer hvor vi vil skyde
+    //skal returnere en position der repræsenterer hvor vi vil skyde
     public Position getFireCoordinates(Fleet enemyShips) {
         enemyFleetSize = sum(enemyShips);
         //checks if finishing ship
@@ -67,27 +67,24 @@ public class Shooter {
         //hvis skibet er sunket
         if (hit) {
             hitShot = temp;
+            positiveHitsMap.add(new Position (hitShot.getPos().x, hitShot.getPos().y));
             finish = true;
         }
         if (newSize < enemyFleetSize) {
             enemyFleetSize = newSize;
+            positiveHitsMap.clear();
             finish = false;
         }
-        //hvis du har ramt et skib uden det er blevet sunket
     }
 
     public void newRound(int round) {
         hitMap.clear();
         fillHitMap();
+        positiveHitsMap.clear();
         finish = false;
     }
 
     public void fillHitMap() {
-        // y = 10 && x 0
-        // y = 10 && x = 10
-        // y = 0 && x = 10 
-        // y = 0 && x = 0
-
         for (int x = 0; x < sizeX; ++x) {
             for (int y = 0; y < sizeY; ++y) {
                 if (x == 0 && y == 0) {
@@ -123,21 +120,24 @@ public class Shooter {
     }
 
     public BoardFields finish() {
-        //check for up
+
+        //vertical
+        //check for up   
         if (hitShot.HasUp() && getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y + 1) != null) {
             return getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y + 1);
-
             //check for down
         } else if (hitShot.HasDown() && getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y - 1) != null) {
             return getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y - 1);
-            //check for right
-        } else if (hitShot.HasRight() && getBoardFieldByPosition(hitShot.getPos().x + 1, hitShot.getPos().y) != null) {
+        }
+
+        //horizontal
+        //check for right
+        if (hitShot.HasRight() && getBoardFieldByPosition(hitShot.getPos().x + 1, hitShot.getPos().y) != null) {
             return getBoardFieldByPosition(hitShot.getPos().x + 1, hitShot.getPos().y);
-            //check for right
+            //check for left
         } else if (hitShot.HasLeft() && getBoardFieldByPosition(hitShot.getPos().x - 1, hitShot.getPos().y) != null) {
             return getBoardFieldByPosition(hitShot.getPos().x - 1, hitShot.getPos().y);
-        } else {
-            return null;
         }
+        return null;
     }
 }
