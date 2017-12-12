@@ -76,11 +76,10 @@ public class ShipPlacer {
         Position pos;
         boolean shipPlaced = false;
 
-        
         do {
             count++;
             boolean angle = rnd.nextBoolean();
-            
+
             //vertical
             if (angle && sizeY >= ship.size()) {
 

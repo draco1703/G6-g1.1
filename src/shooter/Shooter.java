@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import maps.BoardFields;
+
 public class Shooter {
 
     private int enemyFleetSize;
@@ -18,7 +19,6 @@ public class Shooter {
     BoardFields hitShot;
     private Position pos;
     private final List<BoardFields> hitMap = new ArrayList<>();
-    private final Finisher finisher = new Finisher();
     private BoardFields temp;
 
     public Shooter(int sizeX, int sizeY, Random rnd) {
@@ -40,11 +40,12 @@ public class Shooter {
         enemyFleetSize = sum(enemyShips);
         //checks if finishing ship
         if (finish) {
-            pos = finisher.finish(hitShot, hitMap);
-            if (pos != null) {
-                temp.getBoardFieldsByPosition(pos.x, pos.y, hitMap);
-                System.out.println("shooting at " + pos.x + pos.y);
-                return pos;
+            BoardFields field = finish();
+            if (field != null) {
+                Position shot = new Position(field.getPos().x, field.getPos().y);
+                temp = field;
+                hitMap.remove(getBoardFieldByPosition(field.getPos().x, field.getPos().y));
+                return shot;
             } else {
                 finish = false;
                 temp = hitMap.get(rnd.nextInt(hitMap.size()));
@@ -119,5 +120,24 @@ public class Shooter {
             }
         }
         return null;
+    }
+
+    public BoardFields finish() {
+        //check for up
+        if (hitShot.HasUp() && getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y + 1) != null) {
+            return getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y + 1);
+
+            //check for down
+        } else if (hitShot.HasDown() && getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y - 1) != null) {
+            return getBoardFieldByPosition(hitShot.getPos().x, hitShot.getPos().y - 1);
+            //check for right
+        } else if (hitShot.HasRight() && getBoardFieldByPosition(hitShot.getPos().x + 1, hitShot.getPos().y) != null) {
+            return getBoardFieldByPosition(hitShot.getPos().x + 1, hitShot.getPos().y);
+            //check for right
+        } else if (hitShot.HasLeft() && getBoardFieldByPosition(hitShot.getPos().x - 1, hitShot.getPos().y) != null) {
+            return getBoardFieldByPosition(hitShot.getPos().x - 1, hitShot.getPos().y);
+        } else {
+            return null;
+        }
     }
 }
