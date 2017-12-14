@@ -6,7 +6,7 @@ import battleship.interfaces.Fleet;
 import battleship.interfaces.Position;
 import java.util.Random;
 import g6.placers.ShipPlacer;
-import shooter.Shooter;
+import g6.shooters.Shooter;
 
 public class Temp implements BattleshipsPlayer {
 
@@ -22,7 +22,7 @@ public class Temp implements BattleshipsPlayer {
     }
 
     @Override
-    public void startMatch(int rounds, Fleet ships, int sizeX, int sizeY) {
+        public void startMatch(int rounds, Fleet ships, int sizeX, int sizeY) {
         shooter = new Shooter(sizeX, sizeY, rnd);
         placer = new ShipPlacer(sizeX, sizeY, rnd);
     }
@@ -30,11 +30,11 @@ public class Temp implements BattleshipsPlayer {
     @Override
     public void startRound(int round) {
         this.round = round;
-        shooter.newRound(round);
     }
 
     @Override
     public void placeShips(Fleet fleet, Board board) {
+        shooter.newRound(round);
         placer.placeShips(fleet, board);
     }
 
